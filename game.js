@@ -15,13 +15,13 @@ class Road
 		this.image.src = image;
 	}
 
-	Update(road)
+	Update(road) 
 	{
-		this.y += speed;
+		this.y += speed; //При обновлении изображение смещается вниз
 
-		if(this.y > window.innerHeight)
+		if(this.y > window.innerHeight) //Если изображение ушло за край игры, то меняем положение
 		{
-			this.y = road.y - this.image.height + speed;
+			this.y = road.y - this.image.height + speed; //Новое положение указывается с учётом второго фона
 		}
 	}
 }
@@ -42,11 +42,52 @@ class Car
 
 		this.image.src = image;
 	}
+
+	Update()
+	{
+		this.y += speed;
+	}
+
+	Move(v, d) 
+	{
+		if(v == "x") //Перемещение по оси X
+		{
+			this.x += d; //Смещение
+
+			//Если при смещении объект выходит за края холста, то изменения откатываются
+			if(this.x + this.image.width * scale > canvas.width)
+			{
+				this.x -= d; 
+			}
+	
+			if(this.x < 0)
+			{
+				this.x = 0;
+			}
+		}
+		else //Перемещение по оси Y
+		{
+			this.y += d;
+
+			if(this.y + this.image.height * scale > canvas.height)
+			{
+				this.y -= d;
+			}
+
+			if(this.y < 0)
+			{
+				this.y = 0;
+			}
+		}
+		
+	}
 }
 
 
 var canvas = document.getElementById("canvas"); //Получение холста из DOM
 var ctx = canvas.getContext("2d"); //Получение контекста — через него можно работать с холстом
+
+var scale = 0.1; //Масштаб машин
 
 Resize(); // При загрузке страницы задаётся размер холста
 
@@ -58,14 +99,17 @@ canvas.addEventListener("contextmenu", function (e) { e.preventDefault(); return
 
 window.addEventListener("keydown", function (e) { KeyDown(e); }); //Получение нажатий с клавиатуры
 
-var objects = []; //Массив игровых объектов
+var objects = 
+[
+	new Car("images/car.png", 15, 10)
+]; //Массив игровых объектов
 var roads = 
 [
 	new Road("images/road.jpg", 0),
 	new Road("images/road.jpg", 626)
 ]; //Массив с фонами
 
-var player = null; //объект, которым управляет игрок
+var player = 0; //объект, которым управляет игрок
 
 
 var speed = 5;
@@ -98,15 +142,31 @@ function Draw() //Работа с графикой
 	{
 		ctx.drawImage
 		(
-			roads[i].image,
-			0,
-			0,
-			roads[i].image.width,
-			roads[i].image.height,
-			roads[i].x,
-			roads[i].y,
-			canvas.width,
-			canvas.width
+			roads[i].image, //Изображение для отрисовки
+			0, //Начальное положение по оси X на изображении
+			0, //Начальное положение по оси Y на изображении
+			roads[i].image.width, //Ширина изображения
+			roads[i].image.height, //Высота изображение
+			roads[i].x, //Положение по оси X на холсте
+			roads[i].y, //Положение по оси Y на холсте
+			canvas.width, //Ширина изображения на холсте
+			canvas.width //Так как ширина и высота фона одинаковые, в качестве высоты указывается ширина
+		);
+	}
+
+	for(var i = 0; i < objects.length; i++)
+	{
+		ctx.drawImage
+		(
+			objects[i].image, //Изображение для отрисовки
+			0, //Начальное положение по оси X на изображении
+			0, //Начальное положение по оси Y на изображении
+			objects[i].image.width, //Ширина изображения
+			objects[i].image.height, //Высота изображение
+			objects[i].x, //Положение по оси X на холсте
+			objects[i].y, //Положение по оси Y на холсте
+			objects[i].image.width * scale, //Ширина изображения на холсте
+			objects[i].image.height * scale //Так как ширина и высота фона одинаковые, в качестве высоты указывается ширина
 		);
 	}
 }
@@ -116,18 +176,30 @@ function KeyDown(e)
 	switch(e.keyCode)
 	{
 		case 37: //Лево
+			objects[player].Move("x", -speed);
 			break;
 
 		case 39: //Право
+			objects[player].Move("x", speed);
 			break;
 
 		case 38: //Вверх
+			objects[player].Move("y", -speed);
 			break;
 
 		case 40: //Вниз
+			objects[player].Move("y", speed);
 			break;
 
-		case 27: //Вниз
+		case 27: //Esc
+			if(timer == null)
+			{
+				Start();
+			}
+			else
+			{
+				Stop();
+			}
 			break;
 	}
 }
