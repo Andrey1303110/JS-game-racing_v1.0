@@ -33,6 +33,7 @@ class Car
 		this.x = x;
 		this.y = y;
 		this.loaded = false;
+		this.dead = false;
 
 		this.image = new Image();
 
@@ -46,6 +47,26 @@ class Car
 	Update()
 	{
 		this.y += speed;
+
+		if(this.y > canvas.height + 50)
+		{
+			this.dead = true;
+		}
+	}
+
+	Collide(car)
+	{
+		var hit = false;
+
+		if(this.y < car.y + car.image.height * scale && this.y + this.image.height * scale > car.y) //Если объекты находятся на одной линии по горизонтали
+		{
+			if(this.x + this.image.width * scale > car.x && this.x < car.x + car.image.width * scale) //Если объекты находятся на одной линии по вертикали
+			{
+				hit = true;
+			}
+		}
+
+		return hit;
 	}
 
 	Move(v, d) 
@@ -131,6 +152,48 @@ function Update() //Обновление игры
 	roads[0].Update(roads[1]);
 	roads[1].Update(roads[0]);
 
+	if(RandomInteger(0, 10000) > 9700)
+	{
+		objects.push(new Car("images/car_red.png", RandomInteger(30, canvas.width - 50), RandomInteger(250, 400) * -1));
+	}
+
+	var hasDead = false;
+
+	for(var i = 0; i < objects.length; i++)
+	{
+		if(i != player)
+		{
+			objects[i].Update();
+
+			if(objects[i].dead)
+			{
+				hasDead = true;
+			}
+		}
+	}
+
+	if(hasDead)
+	{
+		objects.shift();
+	}
+
+	var hit = false;
+
+	for(var i = 0; i < objects.length; i++)
+	{
+		if(i != player)
+		{
+			hit = objects[player].Collide(objects[i]);
+
+			if(hit)
+			{
+				alert("Вы врезались!");
+				Stop();
+				break;
+			}
+		}
+	}
+
 	Draw();
 }
 
@@ -208,6 +271,12 @@ function Resize()
 {
 	canvas.width = window.innerWidth;
 	canvas.height = window.innerHeight;
+}
+
+function RandomInteger(min, max) 
+{
+	let rand = min - 0.5 + Math.random() * (max - min + 1);
+	return Math.round(rand);
 }
 
 Start();
