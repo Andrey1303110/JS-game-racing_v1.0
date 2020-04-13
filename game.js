@@ -1,8 +1,4 @@
 
-const UPDATE_TIME = 1000 / 60;
-
-
-
 class Road
 {
 	constructor(image, y)
@@ -110,6 +106,10 @@ class Car
 }
 
 
+const UPDATE_TIME = 1000 / 60;
+
+var timer = null;
+
 var canvas = document.getElementById("canvas"); //Getting the canvas from DOM
 var ctx = canvas.getContext("2d"); //Getting the context to work with the canvas
 
@@ -139,6 +139,9 @@ var player = 0; //Player's object index
 
 
 var speed = 5;
+
+Start();
+
 
 function Start()
 {
@@ -282,4 +285,3 @@ function RandomInteger(min, max)
 	return Math.round(rand);
 }
 
-Start();
