@@ -151,6 +151,7 @@ function Start()
 function Stop()
 {
 	clearInterval(timer); //Game stop
+	timer = null;
 }
 
 function Update() 
