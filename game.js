@@ -22,7 +22,7 @@ class Road
 
 		if(this.y > window.innerHeight) //if the image left the screen, it will change it's position
 		{
-			this.y = road.y - this.image.height + speed; //New position depends on the second Road object
+			this.y = road.y - canvas.width + speed; //New position depends on the second Road object
 		}
 	}
 }
@@ -135,7 +135,7 @@ var objects = []; //Game objects
 var roads = 
 [
 	new Road("images/road.jpg", 0),
-	new Road("images/road.jpg", 626)
+	new Road("images/road.jpg", canvas.width)
 ]; //Backgrounds
 
 var player = new Car("images/car.png", canvas.width / 2, canvas.height / 2, true); //Player's object
