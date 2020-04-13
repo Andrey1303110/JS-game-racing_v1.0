@@ -29,12 +29,13 @@ class Road
 
 class Car
 {
-	constructor(image, x, y)
+	constructor(image, x, y, isPlayer)
 	{
 		this.x = x;
 		this.y = y;
 		this.loaded = false;
 		this.dead = false;
+		this.isPlayer = isPlayer;
 
 		this.image = new Image();
 
@@ -47,7 +48,10 @@ class Car
 
 	Update()
 	{
-		this.y += speed;
+		if(!this.isPlayer)
+		{
+			this.y += speed;
+		}
 
 		if(this.y > canvas.height + 50)
 		{
@@ -126,10 +130,7 @@ canvas.addEventListener("contextmenu", function (e) { e.preventDefault(); return
 
 window.addEventListener("keydown", function (e) { KeyDown(e); }); //Listenning for keyboard events
 
-var objects = 
-[
-	new Car("images/car.png", canvas.width / 2, canvas.height / 2)
-]; //Game objects
+var objects = []; //Game objects
 
 var roads = 
 [
@@ -137,7 +138,7 @@ var roads =
 	new Road("images/road.jpg", 626)
 ]; //Backgrounds
 
-var player = 0; //Player's object index
+var player = new Car("images/car.png", canvas.width / 2, canvas.height / 2, true); //Player's object
 
 
 var speed = 5;
@@ -147,7 +148,11 @@ Start();
 
 function Start()
 {
-	timer = setInterval(Update, UPDATE_TIME); //Updating the game 60 times a second
+	if(!player.dead)
+	{
+		timer = setInterval(Update, UPDATE_TIME); //Updating the game 60 times a second
+	}
+	
 }
 
 function Stop()
@@ -163,12 +168,18 @@ function Update()
 
 	if(RandomInteger(0, 10000) > 9700) //Generating new car
 	{
-		objects.push(new Car("images/car_red.png", RandomInteger(30, canvas.width - 50), RandomInteger(250, 400) * -1));
+		objects.push(new Car("images/car_red.png", RandomInteger(30, canvas.width - 50), RandomInteger(250, 400) * -1, false));
+	}
+
+	player.Update();
+
+	if(player.dead)
+	{
+		alert("Crash!");
+		Stop();
 	}
 
 	var isDead = false; 
-
-	objects[player].Move("y", -speed);
 
 	for(var i = 0; i < objects.length; i++)
 	{
@@ -176,13 +187,6 @@ function Update()
 
 		if(objects[i].dead)
 		{
-			if(i == player)
-			{
-				alert("Crash!");
-				Stop();
-				break;
-			}
-
 			isDead = true;
 		}
 	}
@@ -196,16 +200,14 @@ function Update()
 
 	for(var i = 0; i < objects.length; i++)
 	{
-		if(i != player)
-		{
-			hit = objects[player].Collide(objects[i]);
+		hit = player.Collide(objects[i]);
 
-			if(hit)
-			{
-				alert("Crash!");
-				Stop();
-				break;
-			}
+		if(hit)
+		{
+			alert("Crash!");
+			Stop();
+			player.dead = true;
+			break;
 		}
 	}
 
@@ -232,21 +234,28 @@ function Draw() //Working with graphics
 		);
 	}
 
+	DrawCar(player);
+
 	for(var i = 0; i < objects.length; i++)
 	{
-		ctx.drawImage
-		(
-			objects[i].image, 
-			0, 
-			0, 
-			objects[i].image.width, 
-			objects[i].image.height, 
-			objects[i].x, 
-			objects[i].y, 
-			objects[i].image.width * scale, 
-			objects[i].image.height * scale 
-		);
+		DrawCar(objects[i]);
 	}
+}
+
+function DrawCar(car)
+{
+	ctx.drawImage
+	(
+		car.image, 
+		0, 
+		0, 
+		car.image.width, 
+		car.image.height, 
+		car.x, 
+		car.y, 
+		car.image.width * scale, 
+		car.image.height * scale 
+	);
 }
 
 function KeyDown(e)
@@ -254,19 +263,19 @@ function KeyDown(e)
 	switch(e.keyCode)
 	{
 		case 37: //Left
-			objects[player].Move("x", -speed);
+			player.Move("x", -speed);
 			break;
 
 		case 39: //Right
-			objects[player].Move("x", speed);
+			player.Move("x", speed);
 			break;
 
 		case 38: //Up
-			objects[player].Move("y", -speed);
+			player.Move("y", -speed);
 			break;
 
 		case 40: //Down
-			objects[player].Move("y", speed);
+			player.Move("y", speed);
 			break;
 
 		case 27: //Esc
