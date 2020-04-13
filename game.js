@@ -1,3 +1,8 @@
+
+const UPDATE_TIME = 1000 / 60;
+
+
+
 class Road
 {
 	constructor(image, y)
@@ -17,11 +22,11 @@ class Road
 
 	Update(road) 
 	{
-		this.y += speed; //При обновлении изображение смещается вниз
+		this.y += speed; //The image will move down with every frame
 
-		if(this.y > window.innerHeight) //Если изображение ушло за край игры, то меняем положение
+		if(this.y > window.innerHeight) //if the image left the screen, it will change it's position
 		{
-			this.y = road.y - this.image.height + speed; //Новое положение указывается с учётом второго фона
+			this.y = road.y - this.image.height + speed; //New position depends on the second Road object
 		}
 	}
 }
@@ -58,9 +63,9 @@ class Car
 	{
 		var hit = false;
 
-		if(this.y < car.y + car.image.height * scale && this.y + this.image.height * scale > car.y) //Если объекты находятся на одной линии по горизонтали
+		if(this.y < car.y + car.image.height * scale && this.y + this.image.height * scale > car.y) //If there is collision by y
 		{
-			if(this.x + this.image.width * scale > car.x && this.x < car.x + car.image.width * scale) //Если объекты находятся на одной линии по вертикали
+			if(this.x + this.image.width * scale > car.x && this.x < car.x + car.image.width * scale) //If there is collision by x
 			{
 				hit = true;
 			}
@@ -71,11 +76,11 @@ class Car
 
 	Move(v, d) 
 	{
-		if(v == "x") //Перемещение по оси X
+		if(v == "x") //Moving on x
 		{
-			this.x += d; //Смещение
+			this.x += d; //Changing position
 
-			//Если при смещении объект выходит за края холста, то изменения откатываются
+			//Rolling back the changes if the car left the screen
 			if(this.x + this.image.width * scale > canvas.width)
 			{
 				this.x -= d; 
@@ -86,7 +91,7 @@ class Car
 				this.x = 0;
 			}
 		}
-		else //Перемещение по оси Y
+		else //Moving on y
 		{
 			this.y += d;
 
@@ -105,59 +110,57 @@ class Car
 }
 
 
-var canvas = document.getElementById("canvas"); //Получение холста из DOM
-var ctx = canvas.getContext("2d"); //Получение контекста — через него можно работать с холстом
+var canvas = document.getElementById("canvas"); //Getting the canvas from DOM
+var ctx = canvas.getContext("2d"); //Getting the context to work with the canvas
 
-var scale = 0.1; //Масштаб машин
+var scale = 0.1; //Cars scale
 
-Resize(); // При загрузке страницы задаётся размер холста
+Resize(); //Changing the canvas size on startup
 
-window.addEventListener("resize", Resize); //При изменении размеров окна будут менять размеры холста
+window.addEventListener("resize", Resize); //Change the canvas size with the window size
 
-//Запрет на вызов контекстного меню
-//Он нужен для того, чтобы при долгом нажатии на хост с мобильных устройств, не вылезало меню и не мешало играть
+//Forbidding openning the context menu to make the game play better on mobile devices
 canvas.addEventListener("contextmenu", function (e) { e.preventDefault(); return false; }); 
 
-window.addEventListener("keydown", function (e) { KeyDown(e); }); //Получение нажатий с клавиатуры
+window.addEventListener("keydown", function (e) { KeyDown(e); }); //Listenning for keyboard events
 
 var objects = 
 [
-	new Car("images/car.png", 15, 10)
-]; //Массив игровых объектов
+	new Car("images/car.png", canvas.width / 2, canvas.height / 2)
+]; //Game objects
+
 var roads = 
 [
 	new Road("images/road.jpg", 0),
 	new Road("images/road.jpg", 626)
-]; //Массив с фонами
+]; //Backgrounds
 
-var player = 0; //объект, которым управляет игрок
+var player = 0; //Player's object index
 
 
 var speed = 5;
 
-
 function Start()
 {
-	timer = setInterval(Update, 1000 / 60); //Состояние игры будет обновляться 60 раз в секунду — при такой частоте обновление происходящее будет казаться очень плавным
-
+	timer = setInterval(Update, UPDATE_TIME); //Updating the game 60 times a second
 }
 
 function Stop()
 {
-	clearInterval(timer); //Остановка обновления
+	clearInterval(timer); //Game stop
 }
 
-function Update() //Обновление игры
+function Update() 
 {
 	roads[0].Update(roads[1]);
 	roads[1].Update(roads[0]);
 
-	if(RandomInteger(0, 10000) > 9700)
+	if(RandomInteger(0, 10000) > 9700) //Generating new car
 	{
 		objects.push(new Car("images/car_red.png", RandomInteger(30, canvas.width - 50), RandomInteger(250, 400) * -1));
 	}
 
-	var hasDead = false;
+	var isDead = false; 
 
 	for(var i = 0; i < objects.length; i++)
 	{
@@ -167,12 +170,12 @@ function Update() //Обновление игры
 
 			if(objects[i].dead)
 			{
-				hasDead = true;
+				isDead = true;
 			}
 		}
 	}
 
-	if(hasDead)
+	if(isDead)
 	{
 		objects.shift();
 	}
@@ -187,7 +190,7 @@ function Update() //Обновление игры
 
 			if(hit)
 			{
-				alert("Вы врезались!");
+				alert("Crash!");
 				Stop();
 				break;
 			}
@@ -197,23 +200,23 @@ function Update() //Обновление игры
 	Draw();
 }
 
-function Draw() //Работа с графикой
+function Draw() //Working with graphics
 {
-	ctx.clearRect(0, 0, canvas.width, canvas.height); //Очиста холста от предыдущего кадра
+	ctx.clearRect(0, 0, canvas.width, canvas.height); //Clearing the canvas
 
 	for(var i = 0; i < roads.length; i++)
 	{
 		ctx.drawImage
 		(
-			roads[i].image, //Изображение для отрисовки
-			0, //Начальное положение по оси X на изображении
-			0, //Начальное положение по оси Y на изображении
-			roads[i].image.width, //Ширина изображения
-			roads[i].image.height, //Высота изображение
-			roads[i].x, //Положение по оси X на холсте
-			roads[i].y, //Положение по оси Y на холсте
-			canvas.width, //Ширина изображения на холсте
-			canvas.width //Так как ширина и высота фона одинаковые, в качестве высоты указывается ширина
+			roads[i].image, //Image
+			0, //First X on image
+			0, //First Y on image
+			roads[i].image.width, //End X on image
+			roads[i].image.height, //End Y on image
+			roads[i].x, //X on canvas
+			roads[i].y, //Y on canvas
+			canvas.width, //Width on canvas
+			canvas.width //Height on canvas
 		);
 	}
 
@@ -221,15 +224,15 @@ function Draw() //Работа с графикой
 	{
 		ctx.drawImage
 		(
-			objects[i].image, //Изображение для отрисовки
-			0, //Начальное положение по оси X на изображении
-			0, //Начальное положение по оси Y на изображении
-			objects[i].image.width, //Ширина изображения
-			objects[i].image.height, //Высота изображение
-			objects[i].x, //Положение по оси X на холсте
-			objects[i].y, //Положение по оси Y на холсте
-			objects[i].image.width * scale, //Ширина изображения на холсте
-			objects[i].image.height * scale //Так как ширина и высота фона одинаковые, в качестве высоты указывается ширина
+			objects[i].image, 
+			0, 
+			0, 
+			objects[i].image.width, 
+			objects[i].image.height, 
+			objects[i].x, 
+			objects[i].y, 
+			objects[i].image.width * scale, 
+			objects[i].image.height * scale 
 		);
 	}
 }
@@ -238,19 +241,19 @@ function KeyDown(e)
 {
 	switch(e.keyCode)
 	{
-		case 37: //Лево
+		case 37: //Left
 			objects[player].Move("x", -speed);
 			break;
 
-		case 39: //Право
+		case 39: //Right
 			objects[player].Move("x", speed);
 			break;
 
-		case 38: //Вверх
+		case 38: //Up
 			objects[player].Move("y", -speed);
 			break;
 
-		case 40: //Вниз
+		case 40: //Down
 			objects[player].Move("y", speed);
 			break;
 
