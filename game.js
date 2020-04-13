@@ -74,6 +74,8 @@ class Car
 	{
 		if(v == "x") //Moving on x
 		{
+			d *= 2;
+
 			this.x += d; //Changing position
 
 			//Rolling back the changes if the car left the screen
@@ -166,16 +168,22 @@ function Update()
 
 	var isDead = false; 
 
+	objects[player].Move("y", -speed);
+
 	for(var i = 0; i < objects.length; i++)
 	{
-		if(i != player)
-		{
-			objects[i].Update();
+		objects[i].Update();
 
-			if(objects[i].dead)
+		if(objects[i].dead)
+		{
+			if(i == player)
 			{
-				isDead = true;
+				alert("Crash!");
+				Stop();
+				break;
 			}
+
+			isDead = true;
 		}
 	}
 
