@@ -1,4 +1,3 @@
-
 class Road {
 	constructor(image, y) {
 		this.x = 0;
@@ -105,7 +104,7 @@ var timer = null;
 var canvas = document.getElementById("canvas"); //Getting the canvas from DOM
 var ctx = canvas.getContext("2d"); //Getting the context to work with the canvas
 
-var scale = 0.25; //Cars scale
+var scale = 0.26; //Cars scale
 
 Resize(); //Changing the canvas size on startup
 
@@ -120,8 +119,8 @@ var objects = []; //Game objects
 
 var roads =
 	[
-		new Road("images/road.jpg", 0),
-		new Road("images/road.jpg", canvas.height)
+		new Road("images/road2.jpg", 0),
+		new Road("images/road2.jpg", canvas.height)
 	]; //Backgrounds
 
 var player = new Car("images/car1.png", canvas.width / 2, canvas.height * .76, true); //Player's object
