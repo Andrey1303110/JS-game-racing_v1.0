@@ -179,10 +179,11 @@ function Update() {
 		hit = player.Collide(objects[i]);
 
 		if (hit) {
-			alert("Crash!");
 			Stop();
+			alert("Crash!");
 			player.dead = true;
-			break;
+
+			Start()
 		}
 	}
 
