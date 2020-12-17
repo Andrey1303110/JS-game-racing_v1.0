@@ -147,9 +147,9 @@ function Update() {
 	roads[0].Update(roads[1]);
 	roads[1].Update(roads[0]);
 
-	if (RandomInteger(0, 10000) > 9800) //Generating new car
+	if (RandomInteger(0, 10000) > 9700) //Generating new car
 	{
-		objects.push(new Car("images/car2.png", RandomInteger(20, canvas.width - 40), RandomInteger(80, 850) * -1, false));
+		objects.push(new Car("images/car2.png", RandomInteger(12, 353), RandomInteger(60, 350) * -1, false));
 	}
 
 	player.Update();
