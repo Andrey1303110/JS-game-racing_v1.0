@@ -45,7 +45,7 @@ class Car {
 			this.y += speed;
 		}
 
-		if (this.y > canvas.height + 100) {
+		if (this.y > canvas.height) {
 			this.dead = true;
 		}
 	}
@@ -53,9 +53,9 @@ class Car {
 	Collide(car) {
 		var hit = false;
 
-		if (this.y < car.y + (car.image.height - 25) * scale && this.y + this.image.height * scale > car.y) //If there is collision by y
+		if (this.y < car.y + (car.image.height * .8) * scale && this.y + this.image.height * scale > car.y) //If there is collision by y
 		{
-			if (this.x + (this.image.width - 35) * scale > car.x && this.x < car.x + car.image.width * scale) //If there is collision by x
+			if (this.x + (this.image.width * .9) * scale > car.x && this.x < car.x + (car.image.width * .9) * scale) //If there is collision by x
 			{
 				hit = true;
 			}
@@ -67,7 +67,7 @@ class Car {
 	Move(v, d) {
 		if (v == "x") //Moving on x
 		{
-			d *= 2.4;
+			d *= 2;
 
 			this.x += d; //Changing position
 
@@ -104,7 +104,7 @@ var timer = null;
 var canvas = document.getElementById("canvas"); //Getting the canvas from DOM
 var ctx = canvas.getContext("2d"); //Getting the context to work with the canvas
 
-var scale = 0.26; //Cars scale
+var scale = 0.24; //Cars scale
 
 Resize(); //Changing the canvas size on startup
 
@@ -119,14 +119,14 @@ var objects = []; //Game objects
 
 var roads =
 	[
-		new Road("images/road2.jpg", 0),
-		new Road("images/road2.jpg", canvas.height)
+		new Road("images/road4.jpg", 0),
+		new Road("images/road4.jpg", canvas.height)
 	]; //Backgrounds
 
-var player = new Car("images/car1.png", canvas.width / 2, canvas.height * .76, true); //Player's object
+var player = new Car("images/car1.png", canvas.width / 2 - 37, canvas.height * .7, true); //Player's object
 
 
-var speed = 12;
+var speed = 11;
 
 Start();
 
@@ -147,9 +147,9 @@ function Update() {
 	roads[0].Update(roads[1]);
 	roads[1].Update(roads[0]);
 
-	if (RandomInteger(0, 10000) > 9780) //Generating new car
+	if (RandomInteger(0, 10000) > 9800) //Generating new car
 	{
-		objects.push(new Car("images/car2.png", RandomInteger(40, canvas.width - 80), RandomInteger(80, 450) * -1, false));
+		objects.push(new Car("images/car2.png", RandomInteger(20, canvas.width - 40), RandomInteger(80, 850) * -1, false));
 	}
 
 	player.Update();
@@ -182,8 +182,11 @@ function Update() {
 			Stop();
 			alert("Crash!");
 			player.dead = true;
+			/*let question = prompt('Желаете начать заново?');
+			if question != 'No' || 'no' || 'Нет' || 'нет' {
 
-			Start()
+			}*/
+
 		}
 	}
 
@@ -246,10 +249,10 @@ function KeyDown(e) {
 			break;
 
 		case 40: //Down
-			player.Move("y", speed);
+			player.Move("y", speed * 2);
 			break;
 
-		case 27: //Esc
+		case 32: //Space
 			if (timer == null) {
 				Start();
 			}
