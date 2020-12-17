@@ -149,7 +149,7 @@ function Update() {
 
 	if (RandomInteger(0, 10000) > 9700) //Generating new car
 	{
-		objects.push(new Car("images/car2.png", RandomInteger(12, 353), RandomInteger(60, 350) * -1, false));
+		objects.push(new Car("images/car2.png", RandomInteger(12, 353), RandomInteger(60, 630) * -1, false));
 	}
 
 	player.Update();
