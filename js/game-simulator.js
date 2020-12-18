@@ -130,7 +130,7 @@ var roads =
 var player = new Car("images/car1.png", canvas.width / 2 - 37, canvas.height * .76, true); //Player's object
 
 
-var speed = 7;
+var speed = 8;
 
 Start();
 
