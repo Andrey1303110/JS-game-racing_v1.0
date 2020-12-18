@@ -20,3 +20,11 @@ body, html
 	background: #000;
 }
 
+#timer {
+	left: 25px;
+	position: absolute;
+	color: orange;
+	font-size: 30px;
+	font-weight: bold;
+}
+

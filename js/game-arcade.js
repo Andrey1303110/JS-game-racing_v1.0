@@ -204,6 +204,7 @@ function Update() {
 
         if (hit) {
             Stop();
+            alert(timer);
             document.getElementById('sound').play();
             alert("Crash!");
             player.dead = true;
@@ -286,11 +287,11 @@ function KeyDown(e) {
             break;
 
         case 40: //Down
-            player.Move("y", speed * 2);
+            player.Move("y", speed);
             break;
 
         case 83: //Down
-            player.Move("y", speed * 2);
+            player.Move("y", speed);
             break;
 
         case 81: //Left-Up
@@ -322,3 +323,13 @@ function RandomInteger(min, max) {
     return Math.round(rand);
 }
 
+function init() {
+    sec = 0;
+    setInterval(tick, 33);
+}
+
+function tick() {
+    sec++;
+    document.getElementById("timer").
+        childNodes[0].nodeValue = sec;
+}
