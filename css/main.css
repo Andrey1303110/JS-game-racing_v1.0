@@ -21,13 +21,13 @@ img {
     transition: all .3s ease-in-out;
     cursor: pointer;
     width: 250px;
-    opacity: 1;
+    height: 250px;
 }
 
 
 img:hover {
-    filter: brightness(1.25);
-    transform: scale(1.15);
+    filter: brightness(1.2);
+    transform: scale(1.1);
 }
 
 img:hover~p {
