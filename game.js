@@ -53,9 +53,9 @@ class Car {
 	Collide(car) {
 		var hit = false;
 
-		if (this.y < car.y + (car.image.height * .8) * scale && this.y + this.image.height * scale > car.y) //If there is collision by y
+		if (this.y < car.y + (car.image.height * .75) * scale && this.y + this.image.height * scale > car.y) //If there is collision by y
 		{
-			if (this.x + (this.image.width * .9) * scale > car.x && this.x < car.x + (car.image.width * .9) * scale) //If there is collision by x
+			if (this.x + (this.image.width * .85) * scale > car.x && this.x < car.x + (car.image.width * .85) * scale) //If there is collision by x
 			{
 				hit = true;
 			}
@@ -67,12 +67,16 @@ class Car {
 	Move(v, d) {
 		if (v == "x") //Moving on x
 		{
-			d *= 2;
+			d *= 2.75;
 
 			this.x += d; //Changing position
 
 			//Rolling back the changes if the car left the screen
 			if (this.x + this.image.width * scale > canvas.width) {
+				this.x -= d;
+			}
+
+			if (this.x + this.image.width * scale < canvas.width * .1) {
 				this.x -= d;
 			}
 
@@ -97,7 +101,7 @@ class Car {
 }
 
 
-const UPDATE_TIME = 1000 / 35;
+const UPDATE_TIME = 1000 / 55;
 
 var timer = null;
 
@@ -126,7 +130,7 @@ var roads =
 var player = new Car("images/car1.png", canvas.width / 2 - 37, canvas.height * .7, true); //Player's object
 
 
-var speed = 11;
+var speed = 7;
 
 Start();
 
@@ -147,9 +151,29 @@ function Update() {
 	roads[0].Update(roads[1]);
 	roads[1].Update(roads[0]);
 
-	if (RandomInteger(0, 10000) > 9700) //Generating new car
+	if (RandomInteger(0, 1000) > 995) //Generating new car
 	{
-		objects.push(new Car("images/car2.png", RandomInteger(12, 353), RandomInteger(60, 630) * -1, false));
+		objects.push(new Car("images/car2.png", 12, RandomInteger(40, 730) * -1, false));
+	}
+
+	if (RandomInteger(1000, 2000) > 1995) //Generating new car
+	{
+		objects.push(new Car("images/car2.png", 98, RandomInteger(40, 730) * -1, false));
+	}
+
+	if (RandomInteger(2000, 3000) > 2995) //Generating new car
+	{
+		objects.push(new Car("images/car2.png", 182, RandomInteger(40, 730) * -1, false));
+	}
+
+	if (RandomInteger(3000, 4000) > 3995) //Generating new car
+	{
+		objects.push(new Car("images/car2.png", 266, RandomInteger(40, 730) * -1, false));
+	}
+
+	if (RandomInteger(4000, 5000) > 4995) //Generating new car
+	{
+		objects.push(new Car("images/car2.png", 353, RandomInteger(40, 730) * -1, false));
 	}
 
 	player.Update();
