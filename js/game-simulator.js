@@ -204,6 +204,7 @@ function Update() {
 
 		if (hit) {
 			Stop();
+			document.getElementById('sound').play();
 			alert("Crash!");
 			player.dead = true;
 			/*let question = prompt('Желаете начать заново?');
@@ -264,7 +265,15 @@ function KeyDown(e) {
 			player.Move("x", -speed);
 			break;
 
+		case 65: //Left
+			player.Move("x", -speed);
+			break;
+
 		case 39: //Right
+			player.Move("x", speed);
+			break;
+
+		case 68: //Right
 			player.Move("x", speed);
 			break;
 
@@ -272,8 +281,24 @@ function KeyDown(e) {
 			player.Move("y", -speed);
 			break;
 
+		case 87: //Up
+			player.Move("y", -speed);
+			break;
+
 		case 40: //Down
 			player.Move("y", speed * 2);
+			break;
+
+		case 83: //Down
+			player.Move("y", speed * 2);
+			break;
+
+		case 81: //Left-Up
+			player.Move("x", -speed), player.Move("y", -speed);
+			break;
+
+		case 69: //Right-Up
+			player.Move("x", speed), player.Move("y", -speed);
 			break;
 
 		case 32: //Space
