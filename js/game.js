@@ -53,7 +53,7 @@ class Car {
 	Collide(car) {
 		var hit = false;
 
-		if (this.y < car.y + (car.image.height * .75) * scale && this.y + this.image.height * scale > car.y) //If there is collision by y
+		if (this.y < car.y + (car.image.height * .8) * scale && this.y + (this.image.height * .8) * scale > car.y) //If there is collision by y
 		{
 			if (this.x + (this.image.width * .85) * scale > car.x && this.x < car.x + (car.image.width * .85) * scale) //If there is collision by x
 			{
