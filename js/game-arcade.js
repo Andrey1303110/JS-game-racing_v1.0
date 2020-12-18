@@ -127,7 +127,7 @@ var roads =
         new Road("images/road4.jpg", canvas.height)
     ]; //Backgrounds
 
-var player = new Car("images/car1.png", canvas.width / 2 - 37, canvas.height * .7, true); //Player's object
+var player = new Car("images/car1.png", canvas.width / 2 - 37, canvas.height * .76, true); //Player's object
 
 
 var speed = 10;
