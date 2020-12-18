@@ -72,11 +72,11 @@ class Car {
 			this.x += d; //Changing position
 
 			//Rolling back the changes if the car left the screen
-			if (this.x + this.image.width * scale > canvas.width) {
+			if (this.x + this.image.width * scale > canvas.width * .99) {
 				this.x -= d;
 			}
 
-			if (this.x + this.image.width * scale < canvas.width * .1) {
+			if (this.x + this.image.width * scale < canvas.width * .15) {
 				this.x -= d;
 			}
 
