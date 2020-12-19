@@ -14,7 +14,7 @@ class Road {
     }
 
     Update(road) {
-        this.y += speed; //The image will move down with every frame
+        this.y += speed;//The image will move down with every frame
 
         if (this.y > window.innerHeight) //if the image left the screen, it will change it's position
         {
@@ -203,16 +203,13 @@ function Update() {
         hit = player.Collide(objects[i]);
 
         if (hit) {
-            Stop();
-            alert(timer);
             document.getElementById('sound').play();
-            alert("Crash!");
+            Stop();
             player.dead = true;
+            alert("Crash!");
             /*let question = prompt('Желаете начать заново?');
             if question != 'No' || 'no' || 'Нет' || 'нет' {
-
             }*/
-
         }
     }
 
@@ -234,7 +231,7 @@ function Draw() //Working with graphics
                 roads[i].x, //X on canvas
                 roads[i].y, //Y on canvas
                 canvas.width, //Width on canvas
-                canvas.height //Height on canvas
+                canvas.height, //Height on canvas
             );
     }
 
@@ -333,3 +330,5 @@ function tick() {
     document.getElementById("timer").
         childNodes[0].nodeValue = sec;
 }
+
+
